@@ -1,290 +1,271 @@
-#{extends 'main.html' /}
-#{set title:'Home' /}
+#{extends 'main.html' /} #{set title:'Home' /}
 
 <script type="text/javascript">
-var Num1=0;
-var Num2=0;
-var Num3=0;
-var Num4=0;
-var sayi=0;
-var rap = Raphael(1040,0,500,500);
-var ra =  Raphael(0, 0, 935, 200);
+	var Num1 = 0;
+	var Num2 = 0;
+	var Num3 = 0;
+	var Num4 = 0;
+	var sayi = 0;
+	var rap = Raphael(1040, 0, 500, 500);
+	var ra = Raphael(0, 0, 935, 200);
 
-$(function(){
+	$(function() {
 
-	//var r = Raphael('map', 1030, 820),
-	//var r = ScaleRaphael('map', 1030, 820);
-		
-		
-	
+		var r = ScaleRaphael('map', 1030, 820), attributes = {
+			fill : '#fff',
+			stroke : '#3899E6',
+			'stroke-width' : 1,
+			'stroke-linejoin' : 'round'
+		},
 
-	var r = ScaleRaphael('map', 1030, 820),
-	attributes = {
-        fill: '#fff',
-        stroke: '#3899E6',
-        'stroke-width': 1,
-        'stroke-linejoin': 'round'
-    },
-	
 		arr = new Array();
-	    Plaka=new Array();
-	    var obj;
-	 
-	    
-	for (var country in paths) {
-		
-		
-		
-		
-		obj = r.path(paths[country].path);
-		arr[obj.id] = country;
-		var cnt=arr[obj.id];
-		Plaka[obj.id]=paths[country].plaka;
-		
-		 
-		 var plaka=paths[country].plaka;
-         //paths[country].vote[0]=${}
-         
-        // var jsn=arrayList;
-		// alert(jsn[0][0]);
-		 
-		//alert("cagridan Ã¶nce");
-   	  // alert(paths[country].vote[0]+"-"+paths[country].vote[1]+"-"+paths[country].vote[2]+"-"+paths[country].vote[3]);
+		Plaka = new Array();
+		var obj;
 
-       ajax_cagrisi(plaka,cnt,obj);
-       //alert("sonra");
-     //	   alert(paths[country].vote[0]+"-"+paths[country].vote[1]+"-"+paths[country].vote[2]+"-"+paths[country].vote[3]);
+		for ( var country in paths) {
 
-		//alert(paths[country].color);
-	
-		//renkle(country);
-		//alert(paths[country].color);
-		
-        //ciz(paths[country].vote[0],paths[country].vote[1],paths[country].vote[2],paths[country].vote[3],name);
+			obj = r.path(paths[country].path);
+			arr[obj.id] = country;
+			var cnt = arr[obj.id];
+			Plaka[obj.id] = paths[country].plaka;
+			var plaka = paths[country].plaka;
+			ajax_cagrisi(plaka, cnt, obj);
+			obj.click(function() {
 
-		
-		 obj.click(function(){
-			 
-			 var point = this.getBBox(0);
-			 document.location.hash = arr[this.id];
-			 var cnt=arr[this.id];
-			 var name=paths[arr[this.id]].name;
-			 var plaka=paths[arr[this.id]].plaka;
-			
-            ajax_cagrisi(plaka,cnt,obj);
-      
-            ciz(paths[arr[this.id]].vote[0],paths[arr[this.id]].vote[1],paths[arr[this.id]].vote[2],paths[arr[this.id]].vote[3],name);
-           // barchartciz(Num1,Num2,Num3,Num4);
-       	  //  alert(paths[arr[this.id]].vote[0]+"-"+paths[arr[this.id]].vote[1]+"-"+paths[arr[this.id]].vote[2]+"-"+paths[arr[this.id]].vote[3]);
-			     }); 
-		 
-		 
-		 
-		obj
-		.hover(function(){
-this.animate({
-				fill: 'white'
-			}, 300);
+				var point = this.getBBox(0);
+				document.location.hash = arr[this.id];
+				var cnt = arr[this.id];
+				var name = paths[arr[this.id]].name;
+				var plaka = paths[arr[this.id]].plaka;
 
-			
-			//alert(colorr[obj.id]);
-			document.location.hash = arr[this.id];		
-			 var point = this.getBBox(0);
-			
+				ajax_cagrisi(plaka, cnt, obj);
 
-			$('#map').next('.point').remove();
-			
-			$('#map').after($('<div />').addClass('point'));
-			var sum=paths[arr[this.id]].vote[0]+paths[arr[this.id]].vote[1]+paths[arr[this.id]].vote[2]+paths[arr[this.id]].vote[3];
-		    $("#Toplam").val(sum);
-			$("#AKP").val("%"+Math.round(100*paths[arr[this.id]].vote[0]/sum*100)/100 +"    ("+paths[arr[this.id]].vote[0]+"oy)");
-			$("#CHP").val("%"+Math.round(100*paths[arr[this.id]].vote[1]/sum*100)/100 +"    ("+paths[arr[this.id]].vote[1]+"oy)");
-			$("#MHP").val("%"+Math.round(100*paths[arr[this.id]].vote[2]/sum*100)/100 +"    ("+paths[arr[this.id]].vote[2]+"oy)");
-			$("#Diger").val("%"+Math.round(100*paths[arr[this.id]].vote[3]/sum*100)/100 +"    ("+paths[arr[this.id]].vote[3]+"oy)");
-			
-			$('.point')
-			.html(paths[arr[this.id]].name)
-			.prepend($('<a />').attr('href', '#').addClass('close').text('Close'))
-			
-			.css({
-				left: point.x,
-				top: point.y-30
-			})
-			.fadeIn();
-		
-		}, function(){
-			this.animate({
-				fill: paths[arr[this.id]].color
-			}, 300);
-	
-		})
-		$('.point').find('.close').live('click', function(){
-			var t = $(this),
-				parent = t.parent('.point');
-			
-			parent.fadeOut(function(){
-				parent.remove();
+				ciz(paths[arr[this.id]].vote[0], paths[arr[this.id]].vote[1],
+						paths[arr[this.id]].vote[2],
+						paths[arr[this.id]].vote[3], name);
 			});
-			return false;
-		});
-	}	
-	r.changeSize(1024,768,true,false);
-});
 
+			obj.hover(function() {
+				this.animate({
+					fill : 'white'
+				}, 300);
 
+				document.location.hash = arr[this.id];
+				var point = this.getBBox(0);
 
+				$('#map').next('.point').remove();
 
+				$('#map').after($('<div />').addClass('point'));
+				var sum = paths[arr[this.id]].vote[0]
+						+ paths[arr[this.id]].vote[1]
+						+ paths[arr[this.id]].vote[2]
+						+ paths[arr[this.id]].vote[3];
+				$("#Toplam").val(sum);
+				$("#AKP").val(
+						"%"
+								+ Math.round(100 * paths[arr[this.id]].vote[0]
+										/ sum * 100) / 100 + "    ("
+								+ paths[arr[this.id]].vote[0] + "oy)");
+				$("#CHP").val(
+						"%"
+								+ Math.round(100 * paths[arr[this.id]].vote[1]
+										/ sum * 100) / 100 + "    ("
+								+ paths[arr[this.id]].vote[1] + "oy)");
+				$("#MHP").val(
+						"%"
+								+ Math.round(100 * paths[arr[this.id]].vote[2]
+										/ sum * 100) / 100 + "    ("
+								+ paths[arr[this.id]].vote[2] + "oy)");
+				$("#Diger").val(
+						"%"
+								+ Math.round(100 * paths[arr[this.id]].vote[3]
+										/ sum * 100) / 100 + "    ("
+								+ paths[arr[this.id]].vote[3] + "oy)");
 
+				$('.point').html(paths[arr[this.id]].name).prepend(
+						$('<a />').attr('href', '#').addClass('close').text(
+								'Close'))
 
+				.css({
+					left : point.x,
+					top : point.y - 30
+				}).fadeIn();
 
-function ajax_cagrisi(plaka,cnt,obj){
-	
-	 $.ajax({
-    	 type:'GET',
-    	 url:"@{Application.getVote()}",
-         dataType:"json",
-         data:{
-        	 il:plaka
-         },
-         success:function(data){
-        	 for(var i=0;i<4;i++)
-    	 	 paths[cnt].vote[i]=data[i];	
-        	    Num1+=data[0];
-				Num2+=data[1];
-				Num3+=data[2];
-				Num4+=data[3];
+			}, function() {
+				this.animate({
+					fill : paths[arr[this.id]].color
+				}, 300);
+
+			})
+			$('.point').find('.close').live('click', function() {
+				var t = $(this), parent = t.parent('.point');
+
+				parent.fadeOut(function() {
+					parent.remove();
+				});
+				return false;
+			});
+		}
+		r.changeSize(1024, 768, true, false);
+	});
+	function ajax_cagrisi(plaka, cnt, obj) {
+
+		$.ajax({
+			type : 'GET',
+			url : "@{Application.getVote()}",
+			dataType : "json",
+			data : {
+				il : plaka
+			},
+			success : function(data) {
+				for ( var i = 0; i < 4; i++)
+					paths[cnt].vote[i] = data[i];
+				Num1 += data[0];
+				Num2 += data[1];
+				Num3 += data[2];
+				Num4 += data[3];
 				sayi++;
-				if(sayi>=82){
-					
-					Num1-=data[0];
-					Num2-=data[1];
-					Num3-=data[2];
-					Num4-=data[3];
+				if (sayi >= 82) {
+
+					Num1 -= data[0];
+					Num2 -= data[1];
+					Num3 -= data[2];
+					Num4 -= data[3];
 				}
-				barchartciz(Num1,Num2,Num3,Num4);
-			    renkle(cnt);
-        	 obj.attr({fill: paths[cnt].color});
-        //	 alert(cnt);
-       	  // alert(paths[cnt].vote[0]+"-"+paths[cnt].vote[1]+"-"+paths[cnt].vote[2]+"-"+paths[cnt].vote[3]);
+				barchartciz(Num1, Num2, Num3, Num4);
+				renkle(cnt);
+				obj.attr({
+					fill : paths[cnt].color
+				});
+			}
+		})
 
-         }
-     })	
-     
-}
+	}
 
-function renkle(country){
-	var max;
-	var biggest;
-	biggest=0;
-    max=0;
-    //alert("renklede");
-    //alert(paths[country].vote[0]+"-"+paths[country].vote[1]+"-"+paths[country].vote[2]+"-"+paths[country].vote[3]);
-    for(var i=0;i<4;i++){
-    	// alert ("max :"+max+"  vote :"+paths[country].vote[i]);
-    if(paths[country].vote[i]>=max){
-    max = paths[country].vote[i];
-    biggest=i;
-    }
-    }
-   //alert("maksimum="+max);
-    		if(biggest==0)
-    			paths[country].color='orange';
-    			else if(biggest==1)
-    				paths[country].color='red';
-    				else if(biggest==2)
-    					paths[country].color='green';
-    					else
-    						paths[country].color='blue';
-    	//	alert("rengi : "+paths[country].color);
-    	
-    	return false;
-}
+	function renkle(country) {
+		var max;
+		var biggest;
+		biggest = 0;
+		max = 0;
+		for ( var i = 0; i < 4; i++) {
+			if (paths[country].vote[i] >= max) {
+				max = paths[country].vote[i];
+				biggest = i;
+			}
+		}
+		if (biggest == 0)
+			paths[country].color = 'orange';
+		else if (biggest == 1)
+			paths[country].color = 'red';
+		else if (biggest == 2)
+			paths[country].color = 'green';
+		else
+			paths[country].color = 'blue';
 
+		return false;
+	}
 
+	function ciz(a, b, c, d, e) {
 
+		rap.clear();
 
-function ciz(a,b,c,d,e){
-	
-    rap.clear();
+		rap.g.txtattr.font = "12px 'Fontin Sans', Fontin-Sans, sans-serif";
 
-	rap.g.txtattr.font = "12px 'Fontin Sans', Fontin-Sans, sans-serif";
-	                
-	                rap.g.text(105,25, e).attr({"font-size": 20});
-	                
-	                var pie = rap.g.piechart(100, 100, 60, [a, b, c, d], {legend: ["%%.%% AKP", "%%.%% CHP","%%.%% MHP","%%.%% DİĞER"], legendpos: "east", href: ["http://ktuluceng.com", "http://ktuluceng.com","http://ktuluceng.com","http://ktuluceng.com"],colors:['orange', 'red', 'green','blue']});
-	                pie.hover(function () {
-	                    this.sector.stop();
-	                    this.sector.scale(1.1, 1.1, this.cx, this.cy);
-	                    if (this.label) {
-	                        this.label[0].stop();
-	                        this.label[0].scale(1.5);
-	                        this.label[1].attr({"font-weight": 800});
-	                    }
-	                }, function () {
-	                    this.sector.animate({scale: [1, 1, this.cx, this.cy]}, 500, "bounce");
-	                    if (this.label) {
-	                        this.label[0].animate({scale: 1}, 500, "bounce");
-	                        this.label[1].attr({"font-weight": 400});
-	                    }
-	                    
-	                });
-	               
-	//r.clear();
-}
+		rap.g.text(105, 25, e).attr({
+			"font-size" : 20
+		});
 
-function barchartciz(a,b,c,d) {
+		var pie = rap.g.piechart(100, 100, 60, [ a, b, c, d ], {
+			legend : [ "%%.%% AKP", "%%.%% CHP", "%%.%% MHP", "%%.%% DİĞER" ],
+			legendpos : "east",
+			href : [ "http://ktuluceng.com", "http://ktuluceng.com",
+					"http://ktuluceng.com", "http://ktuluceng.com" ],
+			colors : [ 'orange', 'red', 'green', 'blue' ]
+		});
+		pie.hover(function() {
+			this.sector.stop();
+			this.sector.scale(1.1, 1.1, this.cx, this.cy);
+			if (this.label) {
+				this.label[0].stop();
+				this.label[0].scale(1.5);
+				this.label[1].attr({
+					"font-weight" : 800
+				});
+			}
+		}, function() {
+			this.sector.animate({
+				scale : [ 1, 1, this.cx, this.cy ]
+			}, 500, "bounce");
+			if (this.label) {
+				this.label[0].animate({
+					scale : 1
+				}, 500, "bounce");
+				this.label[1].attr({
+					"font-weight" : 400
+				});
+			}
 
-	 ra.clear();
-	  fin = function () {
-          this.flag = r.g.popup(this.bar.x, this.bar.y, this.bar.value || "0").insertBefore(this);
-      },
-      fout = function () {
-          this.flag.animate({opacity: 0}, 300, function () {this.remove();});
-      };
-	ra.g.txtattr.font = "20px 'Fontin Sans', Fontin-Sans, sans-serif";
-	ra.g.text(600, 50,"2011 TÜRKİYE GENELİ OYLAMA SONUÇLARI");
+		});
+	}
 
+	function barchartciz(a, b, c, d) {
 
-	ra.g.hbarchart(235, 60, 700, 70, [[a], [b],[c],[d]], { colors : [ 'orange', 'red', 'green','blue' ],stacked: true}).hover(fin, fout);
-	// ra.g.hbarchart(175, 60, 800, 10, [[59], [18,],[15]], {stacked: true}).hover(fin, fout);
-	// ra.g.hbarchart(175, 50, 300, 150, [[59, 69, 47, 60, 62, 33], [18, 17, 35, 23, 22, 46],[15,8,14,12,11,16]], {stacked: true}).hover(fin, fout);
-	return false;
-}
+		ra.clear();
+		fin = function() {
+			this.flag = r.g
+					.popup(this.bar.x, this.bar.y, this.bar.value || "0")
+					.insertBefore(this);
+		}, fout = function() {
+			this.flag.animate({
+				opacity : 0
+			}, 300, function() {
+				this.remove();
+			});
+		};
+		ra.g.txtattr.font = "20px 'Fontin Sans', Fontin-Sans, sans-serif";
+		ra.g.text(600, 50, "2011 TÜRKİYE GENELİ OYLAMA SONUÇLARI");
+
+		ra.g.hbarchart(235, 60, 700, 70, [ [ a ], [ b ], [ c ], [ d ] ], {
+			colors : [ 'orange', 'red', 'green', 'blue' ],
+			stacked : true
+		}).hover(fin, fout);
+		return false;
+	}
 </script>
-	     
-	<div class="wrapper">
-		<div id="map"></div>
-	</div>
-	<table>
-		<form>
+
+<div class="wrapper">
+	<div id="map"></div>
+</div>
+<table>
+	<form action="">
 		<tr>
-		<td>Toplam:</td> 
-			<td><input id="Toplam" style="text-align: left; width:3em "/> oy.</td> 
-						
-		</tr>
-		<tr> 
-			<td>AKP:</td> 
-			<td>			<input id="AKP" /> 
-</td>
+			<td>Toplam:</td>
+			<td><input id="Toplam" style="text-align: left; width: 3em" />
+				oy.</td>
 
 		</tr>
-		<tr>	
+		<tr>
+			<td>AKP:</td>
+			<td><input id="AKP" />
+			</td>
+
+		</tr>
+		<tr>
 			<td>CHP:</td>
-			<td><input id="CHP" type="text" value="" /> 
-</td>
+			<td><input id="CHP" type="text" value="" />
+			</td>
 		</tr>
-		<tr>	
+		<tr>
 			<td>MHP:</td>
-			<td><input id="MHP" type="text" value=""/> 
-</td>
+			<td><input id="MHP" type="text" value="" />
+			</td>
 		</tr>
 
-		<tr>	
+		<tr>
 			<td>DiĞER:</td>
-			<td><input id="Diger" type="text" value="" /> 
-</td>
-		</tr>	
-		</form>
+			<td><input id="Diger" type="text" value="" />
+			</td>
+		</tr>
+	</form>
 
 </table>
-		
