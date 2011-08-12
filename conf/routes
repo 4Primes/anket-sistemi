@@ -4,6 +4,7 @@
 
 # Home page
 GET     /                                       Application.index
+GET     /yonetim                                Application.yonetim
 GET     /oylama                                 Application.getVote
 
 # Ignore favicon requests

@@ -21,91 +21,7 @@
 		arr = new Array();
 		Plaka = new Array();
 		var obj;
-
-		for ( var country in paths) {
-
-			obj = r.path(paths[country].path);
-			arr[obj.id] = country;
-			var cnt = arr[obj.id];
-			Plaka[obj.id] = paths[country].plaka;
-			var plaka = paths[country].plaka;
-			ajax_cagrisi(plaka, cnt, obj);
-			obj.click(function() {
-
-				var point = this.getBBox(0);
-				document.location.hash = arr[this.id];
-				var cnt = arr[this.id];
-				var name = paths[arr[this.id]].name;
-				var plaka = paths[arr[this.id]].plaka;
-
-				ajax_cagrisi(plaka, cnt, obj);
-
-				ciz(paths[arr[this.id]].vote[0], paths[arr[this.id]].vote[1],
-						paths[arr[this.id]].vote[2],
-						paths[arr[this.id]].vote[3], name);
-			});
-
-			obj.hover(function() {
-				this.animate({
-					fill : 'white'
-				}, 300);
-
-				document.location.hash = arr[this.id];
-				var point = this.getBBox(0);
-
-				$('#map').next('.point').remove();
-
-				$('#map').after($('<div />').addClass('point'));
-				var sum = paths[arr[this.id]].vote[0]
-						+ paths[arr[this.id]].vote[1]
-						+ paths[arr[this.id]].vote[2]
-						+ paths[arr[this.id]].vote[3];
-				$("#Toplam").val(sum);
-				$("#AKP").val(
-						"%"
-								+ Math.round(100 * paths[arr[this.id]].vote[0]
-										/ sum * 100) / 100 + "    ("
-								+ paths[arr[this.id]].vote[0] + "oy)");
-				$("#CHP").val(
-						"%"
-								+ Math.round(100 * paths[arr[this.id]].vote[1]
-										/ sum * 100) / 100 + "    ("
-								+ paths[arr[this.id]].vote[1] + "oy)");
-				$("#MHP").val(
-						"%"
-								+ Math.round(100 * paths[arr[this.id]].vote[2]
-										/ sum * 100) / 100 + "    ("
-								+ paths[arr[this.id]].vote[2] + "oy)");
-				$("#Diger").val(
-						"%"
-								+ Math.round(100 * paths[arr[this.id]].vote[3]
-										/ sum * 100) / 100 + "    ("
-								+ paths[arr[this.id]].vote[3] + "oy)");
-
-				$('.point').html(paths[arr[this.id]].name).prepend(
-						$('<a />').attr('href', '#').addClass('close').text(
-								'Close'))
-
-				.css({
-					left : point.x,
-					top : point.y - 30
-				}).fadeIn();
-
-			}, function() {
-				this.animate({
-					fill : paths[arr[this.id]].color
-				}, 300);
-
-			})
-			$('.point').find('.close').live('click', function() {
-				var t = $(this), parent = t.parent('.point');
-
-				parent.fadeOut(function() {
-					parent.remove();
-				});
-				return false;
-			});
-		}
+ajax_cagrisi2(r);
 		r.changeSize(1024, 768, true, false);
 	});
 	function ajax_cagrisi(plaka, cnt, obj) {
@@ -137,6 +53,132 @@
 				obj.attr({
 					fill : paths[cnt].color
 				});
+			}
+		})
+
+	}
+	
+	function ajax_cagrisi2(r) {
+		
+		arr = new Array();
+		Plaka = new Array();
+		var obj;
+		var i=-1;
+
+		$.ajax({
+			type : 'GET',
+			url : "@{Application.getVote2()}",
+			dataType : "json",
+			data : {
+			},
+			success : function(data) {
+				for( var country in paths){
+				i++;
+				obj = r.path(paths[country].path);
+				arr[obj.id] = country;
+				var cnt = arr[obj.id];
+				
+				
+				
+				for ( var j = 0; j < 4; j++)
+					paths[cnt].vote[j] = data[i][j];
+				
+				Num1 += data[i][0];
+				Num2 += data[i][1];
+				Num3 += data[i][2];
+				Num4 += data[i][3];
+				sayi++;
+				if (sayi >= 82) {
+
+					Num1 -= data[i][0];
+					Num2 -= data[i][1];
+					Num3 -= data[i][2];
+					Num4 -= data[i][3];
+				}
+				barchartciz(Num1, Num2, Num3, Num4);
+				renkle(cnt);
+				obj.attr({
+					fill : paths[cnt].color
+				});
+			
+				
+				obj.click(function() {
+
+					var point = this.getBBox(0);
+					document.location.hash = arr[this.id];
+					var cnt = arr[this.id];
+					var name = paths[arr[this.id]].name;
+					var plaka = paths[arr[this.id]].plaka;
+
+					ajax_cagrisi(plaka, cnt, obj);
+
+					ciz(paths[arr[this.id]].vote[0], paths[arr[this.id]].vote[1],
+							paths[arr[this.id]].vote[2],
+							paths[arr[this.id]].vote[3], name);
+				});
+				obj.hover(function() {
+					this.animate({
+						fill : 'white'
+					}, 300);
+
+					document.location.hash = arr[this.id];
+					var point = this.getBBox(0);
+
+					$('#map').next('.point').remove();
+
+					$('#map').after($('<div />').addClass('point'));
+					var sum = paths[arr[this.id]].vote[0]
+							+ paths[arr[this.id]].vote[1]
+							+ paths[arr[this.id]].vote[2]
+							+ paths[arr[this.id]].vote[3];
+					$("#Toplam").val(sum);
+					$("#AKP").val(
+							"%"
+									+ Math.round(100 * paths[arr[this.id]].vote[0]
+											/ sum * 100) / 100 + "    ("
+									+ paths[arr[this.id]].vote[0] + "oy)");
+					$("#CHP").val(
+							"%"
+									+ Math.round(100 * paths[arr[this.id]].vote[1]
+											/ sum * 100) / 100 + "    ("
+									+ paths[arr[this.id]].vote[1] + "oy)");
+					$("#MHP").val(
+							"%"
+									+ Math.round(100 * paths[arr[this.id]].vote[2]
+											/ sum * 100) / 100 + "    ("
+									+ paths[arr[this.id]].vote[2] + "oy)");
+					$("#Diger").val(
+							"%"
+									+ Math.round(100 * paths[arr[this.id]].vote[3]
+											/ sum * 100) / 100 + "    ("
+									+ paths[arr[this.id]].vote[3] + "oy)");
+
+					$('.point').html(paths[arr[this.id]].name).prepend(
+							$('<a />').attr('href', '#').addClass('close').text(
+									'Close'))
+
+					.css({
+						left : point.x,
+						top : point.y - 30
+					}).fadeIn();
+
+				}, function() {
+					this.animate({
+						fill : paths[arr[this.id]].color
+					}, 300);
+
+				})
+				$('.point').find('.close').live('click', function() {
+					var t = $(this), parent = t.parent('.point');
+
+					parent.fadeOut(function() {
+						parent.remove();
+					});
+					return false;
+				});
+				
+				
+				}
 			}
 		})
 
